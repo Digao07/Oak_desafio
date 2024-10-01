@@ -10,7 +10,6 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(bodyParser.json());
 
-// Rota para buscar todos os produtos, ordenados por valor (menor para maior)
 app.get('/produtos', async (req, res) => {
   try {
     const produtos = await Produto.findAll({ order: [['valor', 'ASC']] });
@@ -20,7 +19,6 @@ app.get('/produtos', async (req, res) => {
   }
 });
 
-// Rota para cadastrar um novo produto
 app.post('/produtos', async (req, res) => {
   const { nome, descricao, valor, disponivel } = req.body;
 
@@ -37,7 +35,7 @@ app.post('/produtos', async (req, res) => {
   }
 });
 
-// Rota para remover um produto pelo ID
+
 app.delete('/produtos/:id', async (req, res) => {
   const { id } = req.params;
 
@@ -48,14 +46,14 @@ app.delete('/produtos/:id', async (req, res) => {
       return res.status(404).json({ error: 'Produto não encontrado.' });
     }
 
-    await produto.destroy();  // Remove o produto do banco de dados
+    await produto.destroy(); 
     res.json({ message: 'Produto removido com sucesso.' });
   } catch (error) {
     res.status(500).json({ error: 'Erro ao remover produto.' });
   }
 });
 
-// Sincroniza com o banco de dados e inicia o servidor
+
 sequelize.sync().then(() => {
   app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
